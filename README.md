@@ -11,3 +11,6 @@ Opdrachtomschrijving: Ontwikkel een CMS. Je hebt de keuze tussen een Webshop, ee
 - Frits Bien
 
 - Daniel Dammers
+
+*Taken:*
+ https://trello.com/b/P4oI1tBz/webshop
