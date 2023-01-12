@@ -72,6 +72,10 @@ html{
     cursor: pointer;
 }
 
+.login__section--p{
+    font-size: 1.9rem;
+}
+
 .error{
     font-size: 1.9rem;
     color: red;

@@ -18,30 +18,53 @@
             <label for="password">Wachtwoord</label>
             <input class="input__veld" type="password" name="password" id="password" required>
         </div>
-        <input class="form__login--submit" type="submit" name="button" value="Inloggen">
+        
+        <div class="form__login--div">
+            <select id="user_type" name="user_type" required>
+                <option value="">Selecteer een optie</option>
+                <option value="user">Gebruiker</option>
+                <option value="admin">Admin</option>
+                <option value="editor">Editor</option>
+            </select>
+            <input class="form__login--submit" type="submit" name="button" value="Inloggen">
+        </div>
+
+        <section class="login__section">
+            <p class="login__section--p">Geen account? klik <a href="aanmelden.php">hier</a></p>
+        </section>
     
 <?php
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
-    // Maak verbinding met de SQLite-database
+    $user_type = $_POST['user_type'];
     $db = new SQLite3('../Private/db/cms.db');
 
-    // Controleren of de gebruikersnaam en wachtwoord in de database staan.
-    $stmt = $db->prepare('SELECT * FROM users WHERE username=:username AND password=:password');
+    $stmt = $db->prepare('SELECT * FROM users WHERE username=:username AND password=:password AND user_type=:user_type');
     $stmt->bindValue(':username', $username);
     $stmt->bindValue(':password', $password);
+    $stmt->bindValue(':user_type', $user_type);
     $result = $stmt->execute();
-
-    if ($result->fetchArray()) {
-        // De gebruiker is ingelogd en gaat naar de homepage.
+    $user = $result->fetchArray();
+    
+    if($user){
         session_start();
         $_SESSION['username'] = $username;
-        header('location: home.php');
+        $_SESSION['user_type'] = $user_type;
+        switch($user_type){
+            case 'admin':
+                header('location: admin.php');
+                break;
+            case 'editor':
+                header('location: editor.php');
+                break;
+            case 'user':
+                header('location: home.php');
+                break;
+        }
     } else {
-        // De gebruiker is niet ingelogd en geeft en error bericht. 
-        echo "<div class='error'>Ongeldige gebruikersnaam of wachtwoord</div>";
+        echo "<div class='error'>Ongeldige gebruikersnaam, wachtwoord of gebruikerstype</div>";
     }
 }
 ?>
