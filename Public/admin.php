@@ -1,7 +1,8 @@
-<?PHP
+<?php
+session_start();
 if ($_SESSION['user_type'] == 'admin') {
-    // Toon de dashboard beheer knoppen
+    echo('je bent admin');
 } else {
-    // Toon alleen de informatie die voor deze gebruiker relevant is
+    echo('je bent geen admin');
 }
 ?>
