@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,6 +8,7 @@
     <title>Inloggen</title>
     <link rel="stylesheet" href="styles/style.css">
 </head>
+
 <body class="body__login">
     <form class="form__login" method="POST" action="">
         <h2 class="form__login--h2">Inlogpagina</h2>
@@ -18,7 +20,7 @@
             <label for="password">Wachtwoord</label>
             <input class="input__veld" type="password" name="password" id="password" required>
         </div>
-        
+
         <div class="form__login--div">
             <select id="user_type" name="user_type" required>
                 <option value="">Selecteer een optie</option>
@@ -32,42 +34,51 @@
         <section class="login__section">
             <p class="login__section--p">Geen account? klik <a href="aanmelden.php">hier</a></p>
         </section>
-    
-<?php
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    $user_type = $_POST['user_type'];
-    $db = new SQLite3('../Private/db/cms.db');
+        <?php
+        require_once('../Private/init.php');
+        require_once('../Private/functions.php');
+        require_once('../Private/database.php');
 
-    $stmt = $db->prepare('SELECT * FROM users WHERE username=:username AND password=:password AND user_type=:user_type');
-    $stmt->bindValue(':username', $username);
-    $stmt->bindValue(':password', $password);
-    $stmt->bindValue(':user_type', $user_type);
-    $result = $stmt->execute();
-    $user = $result->fetchArray();
-    
-    if($user){
-        session_start();
-        $_SESSION['username'] = $username;
-        $_SESSION['user_type'] = $user_type;
-        switch($user_type){
-            case 'admin':
-                header('location: admin.php');
-                break;
-            case 'editor':
-                header('location: editor.php');
-                break;
-            case 'user':
-                header('location: home.php');
-                break;
+        if (is_logged_in()) {
+            header('location: home.php');
+            exit;
         }
-    } else {
-        echo "<div class='error'>Ongeldige gebruikersnaam, wachtwoord of gebruikerstype</div>";
-    }
-}
-?>
-</form>
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $username = $_POST['username'];
+            $password = $_POST['password'];
+            $user_type = $_POST['user_type'];
+            global $db;
+
+            $user = get_user($username, $password, $user_type);
+
+            if ($user) {
+                login_user($username, $user_type);
+                switch ($user_type) {
+                    case 'admin':
+                        header('location: admin.php');
+                        exit;
+                        break;
+                    case 'editor':
+                        header('location: editor.php');
+                        exit;
+                        break;
+                    case 'user':
+                        header('location: home.php');
+                        exit;
+                        break;
+                    default:
+                        header('location: home.php');
+                        exit;
+                        break;
+                }
+            } else {
+                echo "<div class='error'>Ongeldige gebruikersnaam, wachtwoord of gebruikerstype</div>";
+            }
+        }
+        ?>
+    </form>
 </body>
+
 </html>
