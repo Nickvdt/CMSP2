@@ -8,8 +8,13 @@
     <link rel="stylesheet" href="styles/style.css">
 </head>
 <body class="body__login">
-    <form  class="form__login" action="" method="post">
-        <h2 class="form__login--h2">Inlogpagina</h2>
+    
+<?php
+if (!isset($_POST['submit'])) {
+?>
+
+    <form  class="form__login" action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
+        <h2 class="form__login--h2">Aanmeldpagina</h2>
         <div class="form__login--div">
             <label for="username">Gebruikersnaam</label>
             <input class="input__veld" type="text" name="username" id="username" required>
@@ -26,32 +31,46 @@
                 <option value="admin">Admin</option>
                 <option value="editor">Editor</option>
             </select>
-            <input class="form__login--submit" type="submit" name="button" value="Inloggen">
+            <input class="form__login--submit" type="submit" name="button" value="Aanmelden">
         </div>
 
         <section class="login__section">
             <p class="login__section--p">Heb je al een account? Klik <a href="login.php">hier</a></p>
         </section>
-    </form>
     <?php
-     if (isset($_POST['submit'])) {
-            require_once('../Private/init.php');
-            require_once('../Private/database.php');
+    } else {
+    try {
+        $db_path = '../Private/db/cms.db';
+        $sql = "INSERT INTO users (username, password, user_type) VALUES
+        (:username, :password, :user_type)";
+        $stmt = $db_path->prepare($sql);
 
-            $username = $_POST['username'];
-           $password = $_POST['password'];
-           $user_type = $_POST['user_type'];
+        $username = filter_input(INPUT_POST, 'username');
+        $stmt->bindValue(':username', $username, PDO::PARAM_STR)
 
-           $query = "INSERT INTO users (username, password, user_type) VALUES (?,?,?)";
-           $stmt = $db->prepare($query);
-           $stmt->execute([$username, $password, $user_type]);
+        $password = filter_input(INPUT_POST, 'password');
+        $stmt->bindValue(':password', $password, PDO::PARAM_STR)
 
-            if ($stmt->rowCount() > 0) {
-             echo "Gebruiker is succesvol toegevoegd";
-         } else {
-                echo "Er is iets misgegaan tijdens het toevoegen van de gebruiker";
-            }
+        $user_type = filter_input(INPUT_POST, 'user_type');
+        $stmt->bindValue(':user_type', $user_type, PDO::PARAM_STR)
+
+        $succes = $stmt->execute();
+        if($succes){
+            echo "Gebruiker is succesvol aangemaakt!";
+        } else{
+            echo "Er is iets mis gegaan";
         }
-        ?>
+        $db = null
+        } catch (PDOExeption $e) {
+            print "Er is een error: " . $e->getMessage() . "<br/>";
+            die();
+        }
+
+
+
+    }
+    ?>
+    
+    </form>
 </body>
 </html>
