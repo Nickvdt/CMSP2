@@ -19,4 +19,12 @@ function login_user($username, $user_type){
     $_SESSION['user_type'] = $user_type;
 }
 
+function check_login() {
+    if (!isset($_SESSION['username'])) {
+        header('location: login.php');
+        exit;
+    }
+}
+
+
 ?>

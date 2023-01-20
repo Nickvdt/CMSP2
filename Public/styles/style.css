@@ -1,17 +1,17 @@
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-html{
+html {
     font-size: 62.5%;
 }
 
 
 
 /* login pagina */
-.body__login{
+.body__login {
     background-image: url("../img/peakpx.webp");
     display: flex;
     justify-content: center;
@@ -22,7 +22,7 @@ html{
 }
 
 
-.form__login{
+.form__login {
     border-radius: 3rem;
     width: 50rem;
     box-shadow: 0 2.0rem 5rem rgb(0 0 0 / 55%);
@@ -36,7 +36,7 @@ html{
     gap: 2rem;
 }
 
-.form__login--h2{
+.form__login--h2 {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -44,13 +44,13 @@ html{
     border-bottom: 0.2px solid lightgrey;
 }
 
-.form__login--div{
+.form__login--div {
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
 
-.input__veld{
+.input__veld {
     display: block;
     width: 100%;
     padding: 1rem 2rem;
@@ -59,7 +59,7 @@ html{
     background: #EEEEEE;
 }
 
-.form__login--submit{
+.form__login--submit {
     font-size: 1.6rem;
     border: 0.1rem solid black;
     background: green;
@@ -68,17 +68,52 @@ html{
     height: 5rem;
 }
 
-.form__login--submit:hover{
+.form__login--submit:hover {
     cursor: pointer;
 }
 
-.login__section--p{
+.login__section--p {
     font-size: 1.9rem;
 }
 
-.error{
+.error {
     font-size: 1.9rem;
     color: red;
 }
 
 /* Einde login pagina */
+
+
+/* navigatiebar */
+.header {
+    width: 100%;
+    margin: auto;
+    background: #EEEEEE;
+    box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.15);
+    font-size: 3rem;
+}
+
+.header__nav {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0rem 2rem;
+}
+
+.header__ul {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.header__listItem {
+    padding: 1rem;
+    border-radius: 2rem;
+    list-style: none;
+}
+
+.listItem__link {
+    color: black;
+}
