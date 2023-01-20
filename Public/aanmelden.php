@@ -8,20 +8,8 @@
     <link rel="stylesheet" href="styles/style.css">
 </head>
 <body class="body__login">
-    <form class="form__login" method="POST" action="">
-        <h2 class="form__login--h2">Aanmeldpagina</h2>
-        <div class="form__login--div">
-            <label for="username">Voornaam</label>
-            <input class="input__veld" type="text" name="username" id="username" required>
-        </div>
-        <div class="form__login--div">
-            <label for="username">Achternaam</label>
-            <input class="input__veld" type="text" name="username" id="username" required>
-        </div>
-        <div class="form__login--div">
-            <label for="username">E-mail</label>
-            <input class="input__veld" type="text" name="username" id="username" required>
-        </div>
+    <form  class="form__login" action="" method="post">
+        <h2 class="form__login--h2">Inlogpagina</h2>
         <div class="form__login--div">
             <label for="username">Gebruikersnaam</label>
             <input class="input__veld" type="text" name="username" id="username" required>
@@ -30,50 +18,40 @@
             <label for="password">Wachtwoord</label>
             <input class="input__veld" type="password" name="password" id="password" required>
         </div>
-        
+        <label for="user_type">Gebruikerstype:</label>
         <div class="form__login--div">
+            <select id="user_type" name="user_type" required>
+                <option value="">Selecteer een optie</option>
+                <option value="user">Gebruiker</option>
+                <option value="admin">Admin</option>
+                <option value="editor">Editor</option>
+            </select>
             <input class="form__login--submit" type="submit" name="button" value="Inloggen">
         </div>
 
         <section class="login__section">
             <p class="login__section--p">Heb je al een account? Klik <a href="login.php">hier</a></p>
         </section>
-    
-<?php
+    </form>
+    <?php
+     if (isset($_POST['submit'])) {
+            require_once('../Private/init.php');
+            require_once('../Private/database.php');
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    $user_type = $_POST['user_type'];
-    $db = new SQLite3('../Private/db/cms.db');
+            $username = $_POST['username'];
+           $password = $_POST['password'];
+           $user_type = $_POST['user_type'];
 
-    $stmt = $db->prepare('SELECT * FROM users WHERE username=:username AND password=:password AND user_type=:user_type');
-    $stmt->bindValue(':username', $username);
-    $stmt->bindValue(':password', $password);
-    $stmt->bindValue(':user_type', $user_type);
-    $result = $stmt->execute();
-    $user = $result->fetchArray();
-    
-    if($user){
-        session_start();
-        $_SESSION['username'] = $username;
-        $_SESSION['user_type'] = $user_type;
-        switch($user_type){
-            case 'admin':
-                header('location: admin.php');
-                break;
-            case 'editor':
-                header('location: editor.php');
-                break;
-            case 'user':
-                header('location: home.php');
-                break;
+           $query = "INSERT INTO users (username, password, user_type) VALUES (?,?,?)";
+           $stmt = $db->prepare($query);
+           $stmt->execute([$username, $password, $user_type]);
+
+            if ($stmt->rowCount() > 0) {
+             echo "Gebruiker is succesvol toegevoegd";
+         } else {
+                echo "Er is iets misgegaan tijdens het toevoegen van de gebruiker";
+            }
         }
-    } else {
-        echo "<div class='error'>Ongeldige gebruikersnaam, wachtwoord of gebruikerstype</div>";
-    }
-}
-?>
-</form>
+        ?>
 </body>
 </html>
