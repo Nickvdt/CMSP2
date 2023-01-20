@@ -22,10 +22,13 @@ check_login();
                     <p class="listItem__p">Je hebt de rechten van een <?php echo $_SESSION['user_type'];?></p>
                 </li>
                 <li class="header__listItem">
-                    <a class="listItem__link" href="home.php">Homepage</a>
+                    <a class="listItem__link" href="home.php"> Homepage</a>
                 </li>
                 <li class="header__listItem">
                     <a class="listItem__link" href="uitloggen.php">Uitloggen</a>
+                </li>
+                <li  class="header__listItem">
+                    <a class="listItem__link" href="admin.php" <?php show_admin_link();?></a>
                 </li>
             </ul>
         </nav>

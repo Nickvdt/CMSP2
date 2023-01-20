@@ -26,5 +26,32 @@ function check_login() {
     }
 }
 
+function admin_check() {
+    if (!isset($_SESSION['admin'])) {
+        header('location: admin.php');
+        exit;
+
+    }
+}
+
+function show_admin_link() {
+    if ($_SESSION['user_type'] === 'admin') {
+        echo '<a href="admin.php">Admin Dashboard</a>';
+    }
+}
+
+
+
+function get_all_users(){
+    global $db;
+    $stmt = $db->prepare('SELECT * FROM users');
+    $result = $stmt->execute();
+    $users = array();
+    while($row = $result->fetchArray(SQLITE3_ASSOC)) {
+        $users[] = $row;
+    }
+    return $users;
+}
+
 
 ?>
