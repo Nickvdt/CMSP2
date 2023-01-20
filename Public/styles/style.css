@@ -117,3 +117,8 @@ html {
 .listItem__link {
     color: black;
 }
+
+/*admin panel */
+.main-content{
+    font-size: 2rem;
+}
