@@ -39,12 +39,6 @@
         require_once('../Private/init.php');
         require_once('../Private/functions.php');
         require_once('../Private/database.php');
-
-        if (is_logged_in()) {
-            header('location: home.php');
-            exit;
-        }
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $username = $_POST['username'];
             $password = $_POST['password'];
@@ -52,7 +46,6 @@
             global $db;
 
             $user = get_user($username, $password, $user_type);
-
             if ($user) {
                 login_user($username, $user_type);
                 switch ($user_type) {

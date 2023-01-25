@@ -28,7 +28,7 @@ check_login();
                     <a class="listItem__link" href="uitloggen.php">Uitloggen</a>
                 </li>
                 <li  class="header__listItem">
-                    <a class="listItem__link" href="admin.php" <?php show_admin_link();?></a>
+                    <a class="listItem__link" href="admin.php"<?php show_admin_link(); ?> </a>
                 </li>
             </ul>
         </nav>
