@@ -7,10 +7,10 @@ if(isset($_POST['submit'])) {
 
     $file = $_FILES['image'];
     $fileName = $file['name'];
-
     $fileSize = $file['size'];
     $fileError = $file['error'];
     $fileType = $file['type'];
+
 
     $fileExt = explode('.', $fileName);
     $fileActualExt = strtolower(end($fileExt));
@@ -22,21 +22,21 @@ if(isset($_POST['submit'])) {
     if(in_array($fileActualExt, $allowed)) {
 
         if($fileError === 0) {
-      
+   
             if($fileSize < 1000000) {
-      
+
                 $fileNameNew = uniqid('', true).".".$fileActualExt;
-              
+ 
                 $fileDestination = 'uploads/'.$fileNameNew;
-              
+
                 move_uploaded_file($fileTmpName, $fileDestination);
 
                 $username = $_POST['username'];
                 $password = $_POST['password'];
                 $user_type = $_POST['user_type'];
-         
+
                 $stmt = $db->prepare("INSERT INTO users (username, password, user_type, image) VALUES (:username, :password, :user_type, :image)");
-           
+
                 $stmt->bindParam(':username', $username);
                 $stmt->bindParam(':password', $password);
                 $stmt->bindParam(':user_type', $user_type);
@@ -71,7 +71,8 @@ echo "Dit bestandstype is niet toegestaan";
 <body>
 <form action="" method="post" enctype="multipart/form-data">
     <input type="file" name="image" required>
-
+    <input type="text" name="username" required>
+    <input type="password" name="password" required>
     <select name="user_type" required>
         <option value="">Selecteer een optie</option>
         <option value="user">Gebruiker</option>
